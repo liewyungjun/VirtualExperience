@@ -1,8 +1,21 @@
-import * as React from 'react';
-import { ImageBackground, StyleSheet, Text, View,TouchableOpacity } from "react-native";
+import React, {useEffect} from 'react';
+import { ImageBackground, StyleSheet, Text, View,TouchableOpacity, Linking } from "react-native";
+import { FontAwesome } from '@expo/vector-icons';
 
-
-export default function planetInfo() {
+export default function planetInfo({navigation}) {
+    useEffect(() => {
+        navigation.setOptions({
+          headerRight: () => (
+            <TouchableOpacity style={{margin:20,}} onPress={() => {
+                Linking.openURL('https://www.marinabaysands.com/museum/events/virtual-tour-planet-or-plastic.html')
+                .catch(err => {
+                    console.error("Failed opening page because: ", err)
+                    alert('Failed to open page')})}}>
+             <FontAwesome name="star-o" size={24} color="black" />
+            </TouchableOpacity>
+          ),
+        });
+      })
   return (
     <View>
       <ImageBackground source={require('../../assets/planetpic.webp')} style={styles.background} imageStyle={{opacity: 0.3}}>

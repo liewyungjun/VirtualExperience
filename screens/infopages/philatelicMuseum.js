@@ -1,8 +1,21 @@
-import * as React from 'react';
+import React, {useEffect} from 'react';
 import { ImageBackground, StyleSheet, Text, View,TouchableOpacity } from "react-native";
+import { FontAwesome } from '@expo/vector-icons';
 
-
-export default function philatelicinfo() {
+export default function philatelicinfo({navigation}) {
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity style={{margin:20,}}  onPress={() => {
+          Linking.openURL('https://www.nhb.gov.sg/spm/who-we-are/resources/virtual-tours')
+          .catch(err => {
+              console.error("Failed opening page because: ", err)
+              alert('Failed to open page')})}} >
+          <FontAwesome name="star-o" size={24} color="black" />
+        </TouchableOpacity>
+      ),
+    });
+  });
   return (
     <View>
       <ImageBackground source={require('../../assets/philatelicmuseum.jpg')} style={styles.background} imageStyle={{opacity: 0.2}}>

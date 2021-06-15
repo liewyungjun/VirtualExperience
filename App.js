@@ -37,7 +37,7 @@ export default function App() {
       <Tab.Screen name="List" component={dummy} options={{tabBarLabel:'List', tabBarIcon:({color,size}) =>(
         <FontAwesome name="list-ul" size={24} color="black" />
       )}} />
-      <Tab.Screen name="User" component={planetInfo} options={{tabBarLabel:'User', tabBarIcon:({color,size}) =>(
+      <Tab.Screen name="User" component={dummy} options={{tabBarLabel:'User', tabBarIcon:({color,size}) =>(
         <FontAwesome name="user" size={24} color="black" />
       )}} />
     </Tab.Navigator>
