@@ -6,15 +6,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import dummy from './screens/dummy';
 import HomeScreen from './screens/homeScreen';
 import { FontAwesome } from '@expo/vector-icons';
-import planetInfo from './screens/infopages/planet.js';
-
-function SettingsScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Settings!</Text>
-    </View>
-  );
-}
 
 const Tab = createBottomTabNavigator();
 
