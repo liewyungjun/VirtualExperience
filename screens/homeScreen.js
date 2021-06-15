@@ -1,13 +1,12 @@
 import * as React from 'react';
-import { Text, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Text, View, Image } from 'react-native';
+
 
 export default function HomeScreen() {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>HELLOOOOOO!</Text>
-    </View>
+    <View style={{justifyContent:'center', alignItems:'center',}} >
+      <Image source={require('../assets/logo.png')} />
+</View>
   );
 }
 
