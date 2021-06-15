@@ -29,15 +29,20 @@ export default function App() {
     <>
     {loading === false ? (
     <NavigationContainer>
-    <Tab.Navigator>
+    <Tab.Navigator
+      tabBarOptions={{
+        activeTintColor: '#7724b7',
+        inactiveTintColor: 'gray',
+      }}
+    >
       <Tab.Screen name="Map" component={dummy} options={{tabBarLabel:'Map', tabBarIcon:({color,size}) =>(
-        <FontAwesome name="map-o" size={24} color="black" />
+        <FontAwesome name="map" size={24} color={color} />
       )}} />
       <Tab.Screen name="List" component={dummy} options={{tabBarLabel:'List', tabBarIcon:({color,size}) =>(
-        <FontAwesome name="list-ul" size={24} color="black" />
+        <FontAwesome name="list-ul" size={24} color={color} />
       )}} />
       <Tab.Screen name="User" component={dummy} options={{tabBarLabel:'User', tabBarIcon:({color,size}) =>(
-        <FontAwesome name="user" size={24} color="black" />
+        <FontAwesome name="user" size={24} color={color} />
       )}} />
     </Tab.Navigator>
     </NavigationContainer>
@@ -52,7 +57,7 @@ export default function App() {
       <Tab.Navigator>
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Map" component={HomeScreen} options={{tabBarLabel:'Map', tabBarIcon:({color,size}) =>(
-          <FontAwesome name="map-o" size={24} color="black" />
+          <FontAwesome name="map" size={24} color="black" />
         )}} />
         <Tab.Screen name="List" component={HomeScreen} options={{tabBarLabel:'List', tabBarIcon:({color,size}) =>(
           <FontAwesome name="list-ul" size={24} color="black" />
