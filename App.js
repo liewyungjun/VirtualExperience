@@ -8,14 +8,6 @@ import HomeScreen from './screens/homeScreen';
 import MapScreen from './screens/mapScreen';
 import { FontAwesome } from '@expo/vector-icons';
 
-function SettingsScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Settings!</Text>
-    </View>
-  );
-}
-
 const Tab = createBottomTabNavigator();
 
 
