@@ -4,22 +4,43 @@ import { NavigationContainer } from '@react-navigation/native';
 import { useEffect, useState } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import FontAwesome from "react-native-vector-icons/FontAwesome";  
+import firebase from "../database/firebase";
+import ProfileScreen from "./dummy"
 
+const auth = firebase.auth();
 
-function Login({navigation}) {
+function Login({navigation, setIsSignedIn}) {
   const [username,setUsername] = useState("");
   const [password,setPassword] = useState("");
+  const [errorMessage,setErrorMessage] = useState("");
+
+  function login() {
+  	if (username.trim() !== "" && password.trim() !== "") {
+      auth.signInWithEmailAndPassword(username, password)
+        .then(() => setIsSignedIn(true))
+        .catch(error => {
+      	  if (error.code === "auth/user-not-found") {
+            auth.createUserWithEmailAndPassword(username, password)
+              .then(() => navigation.navigate("Profile"))
+              .catch(error => setErrorMessage(error.message))
+      	  } else {
+      	    setErrorMessage(error.message)
+      	  }
+        })
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.reminder}>To continue, please sign up with your email</Text>
-      <Text style={styles.textStyle}>Email Address or Username</Text>
+      <Text style={styles.textStyle}>Email Address</Text>
       <TextInput style={styles.usernameInput} onChangeText={(text) =>  setUsername(text)}/>
       <Text style={styles.textStyle}>Password</Text>
-      <TextInput style={styles.usernameInput} onChangeText={(text) => setPassword(text)}/>
-      <TouchableOpacity style={styles.buttonStyle} onPress={ () => navigation.navigate("Profile") }>
-      <Text style={styles.buttonTextStyle}>Submit</Text>
+      <TextInput style={styles.usernameInput} onChangeText={(text) => setPassword(text)} secureTextEntry/>
+      <TouchableOpacity style={styles.buttonStyle} onPress={login}>
+        <Text style={styles.buttonTextStyle}>Submit</Text>
       </TouchableOpacity>
-      
+      <Text style={styles.reminder}>{errorMessage}</Text>
     </View>
   );
 }
@@ -62,10 +83,8 @@ const styles = StyleSheet.create({
     alignItem:'left',
     fontSize: 100,
     fontWeight:"Bold",
-    
   },
   buttonStyle:{
-
      marginTop:20,
      marginLeft:245,
      backgroundColor: "pink",
@@ -77,12 +96,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const Stack = createStackNavigator();
-
 export default function EventsStack() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen  name="Login" component= {Login} option={{headerTitle: "Login",headerTitleStyle:styles.headerTitleStyle , headerStyle:styles.headerStyle}}/>
-    </Stack.Navigator>
-  );
+  const [isSignedIn, setIsSignedIn] = useState(auth.user)
+
+  return (<>
+  	{isSignedIn ? <ProfileScreen /> : <Login setIsSignedIn={setIsSignedIn} />}
+  </>);
 }
