@@ -7,11 +7,14 @@ import {
   FlatList,
   Dimensions,
   Image,
+  Linking,
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import InfoScreen from "./infoScreen"
 import data from '../data.js'
+import { FontAwesome } from "@expo/vector-icons";
+import { back } from "react-native/Libraries/Animated/src/Easing";
 
 function PurpleButton(props) {
   return (
@@ -53,9 +56,46 @@ function listScreen({ navigation }) {
               borderBottomLeftRadius: 10,
             }}
           >
-            <Text style={{ fontWeight: "bold", color: "black", padding: 10 }}>
-              {item.title}
-            </Text>
+            <View style={{ flexDirection: "row" }}>
+              <Text
+                style={{
+                  width: "70%",
+                  fontWeight: "bold",
+                  color: "black",
+                  padding: 10,
+                }}
+              >
+                {item.title}
+              </Text>
+              <FontAwesome
+                name="star-o"
+                size={24}
+                color="black"
+                style={{
+                  width: "15%",
+                  padding: 10,
+                  marginRight: 0,
+                  right: 0,
+                  position: "absolute",
+                }}
+              />
+            </View>
+            <Text style={{ padding: 10 }}>Description: {item.title}</Text>
+            <TouchableOpacity
+              onPress={() => {
+                Linking.openURL(item.uri).catch((err) => {
+                  console.error("Failed opening page because: ", err);
+                  alert("Failed to open page");
+                });
+              }}
+            >
+              <FontAwesome
+                name="external-link"
+                size={24}
+                color="black"
+                style={{ padding: 10, marginLeft: 5 }}
+              />
+            </TouchableOpacity>
           </View>
         </TouchableOpacity>
       </View>
