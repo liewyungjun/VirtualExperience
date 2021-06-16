@@ -14,7 +14,7 @@ const Tab = createBottomTabNavigator();
 
 export default function App() {
   const [loading, setLoading] = useState(true)
-  const [likes, setLikes] = useState([1])
+  const [likes, setLikes] = useState(["1"])
 
   function likeTour(id) {
     const newArray = likes.includes(id) ? likes.filter(tour => tour !== id) : [...likes, id]

@@ -11,10 +11,10 @@ import {
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import InfoScreen from "./infoScreen"
-import data from '../data.js'
 import { FontAwesome } from "@expo/vector-icons";
 import { back } from "react-native/Libraries/Animated/src/Easing";
+import InfoScreen from "./infoScreen"
+import data from '../data.js'
 
 function PurpleButton(props) {
   return (
@@ -24,21 +24,13 @@ function PurpleButton(props) {
   );
 }
 
-function listScreen({ navigation }) {
+function ListScreen({ navigation, likes, likeTour }) {
   const [list, setList] = React.useState(data);
+  const [favorite, setFavorite] = React.useState(false);
 
   function renderItem({ item }) {
     return (
-      <View>
-        <TouchableOpacity
-          style={styles.tourLink}
-          onPress={() => {
-            navigation.navigate('Info', {
-              id: item.id,
-              title: item.title,
-            });
-          }}
-        >
+        <View style={styles.tourLink}>
           <Image
             source={item.image}
             style={{
@@ -46,7 +38,8 @@ function listScreen({ navigation }) {
               height: "50%",
               borderTopRightRadius: 10,
               borderTopLeftRadius: 10,
-            }} />
+            }}
+          />
           <View
             style={{
               backgroundColor: "white",
@@ -57,20 +50,27 @@ function listScreen({ navigation }) {
             }}
           >
             <View style={{ flexDirection: "row" }}>
-              <Text
-                style={{
-                  width: "70%",
-                  fontWeight: "bold",
-                  color: "black",
-                  padding: 10,
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('Info', {
+                    id: item.id,
+                    title: item.title,
+                  });
                 }}
+                style={{ width: "70%" }}
               >
-                {item.title}
-              </Text>
-              <FontAwesome
-                name="star-o"
-                size={24}
-                color="black"
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                    color: "black",
+                    padding: 10,
+                    fontSize: 16,
+                  }}
+                >
+                  {item.title}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
                 style={{
                   width: "15%",
                   padding: 10,
@@ -78,36 +78,58 @@ function listScreen({ navigation }) {
                   right: 0,
                   position: "absolute",
                 }}
-              />
+                onPress={() => likeTour(item.id)}
+              >
+                <FontAwesome
+                  name={likes.includes(item.id) ? "star" : "star-o"}
+                  size={24}
+                  color="black" 
+                />
+              </TouchableOpacity>
             </View>
-            <Text style={{ padding: 10 }}>Description: {item.title}</Text>
+            <Text
+              style={{ margin: 10, }}
+              numberOfLines={2}
+            >
+              {item.description}
+            </Text>
             <TouchableOpacity
               onPress={() => {
-                Linking.openURL(item.uri).catch((err) => {
+                Linking.openURL(item.link).catch((err) => {
                   console.error("Failed opening page because: ", err);
                   alert("Failed to open page");
                 });
               }}
+              style={{ flexDirection: "row" }}
             >
               <FontAwesome
                 name="external-link"
-                size={24}
+                size={20}
                 color="black"
-                style={{ padding: 10, marginLeft: 5 }}
+                style={{ marginRight: 10, marginLeft: 10 }}
               />
+              <Text
+                numberOfLines={1}
+                style={{width: '80%'}}
+              >
+                {item.link}
+              </Text>
             </TouchableOpacity>
           </View>
-        </TouchableOpacity>
-      </View>
+        </View>
     );
   }
 
   return (
-    <View style={{flex: 1}}>
+    <View>
       <View style={styles.buttons}>
         <PurpleButton title="Tour" onPress={() => {}} />
         <PurpleButton title="Price" onPress={() => {}} />
-        <PurpleButton title="Favourite" onPress={() => {}} />
+        <PurpleButton title={favorite ? "Show: Favorites" : "Show: All"} onPress={() => {
+          setFavorite(!favorite)
+          const newList = favorite ? data : list.filter(item => likes.includes(item.id))
+          setList(newList)
+        }} />
       </View>
       <View
         style={{
@@ -118,6 +140,7 @@ function listScreen({ navigation }) {
           data={list} 
           renderItem={renderItem} 
           keyExtractor={item => item.id}
+          extraData={likes}
         />
       </View>
     </View>
@@ -130,7 +153,10 @@ export default function listStack(props) {
   const { likes, likeTour } = props
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Tour List" component={listScreen} />
+      <Stack.Screen name="Tour List"
+      >
+        {(props) => <ListScreen {...props} likes={likes} likeTour={likeTour} />}
+      </Stack.Screen>
       <Stack.Screen 
           name='Info' 
           options={({ route }) => ({ title: route.params.title })}
@@ -143,7 +169,7 @@ export default function listStack(props) {
 
 const styles = StyleSheet.create({
   tourLink: {
-    margin: 20,
+    margin: 10,
     width: 350,
     height: 250,
     backgroundColor: "#7556A9",
@@ -155,7 +181,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     justifyContent: 'center',
-    marginTop: 10,
+    margin: 10,
   },
   button: {
     backgroundColor: "#7556A9",
