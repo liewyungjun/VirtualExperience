@@ -7,22 +7,27 @@ import {
   FlatList,
   Dimensions,
   Image,
+  Linking,
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import philatelicinfo from "./infopages/philatelicMuseum";
 import planetInfo from "./infopages/planet";
+import { FontAwesome } from "@expo/vector-icons";
+import { back } from "react-native/Libraries/Animated/src/Easing";
 
 const DATA = [
   {
     id: "0",
     title: "Singapore Philatelic Museum",
     imageplace: "../assets/philatelicmuseum.jpg",
+    uri: "https://www.nhb.gov.sg/spm/who-we-are/resources/virtual-tours",
   },
   {
     id: "1",
     title: "Planet or Plastic?",
     imageplace: "../assets/planetpic.webp",
+    uri: "https://www.marinabaysands.com/museum/events/virtual-tour-planet-or-plastic.html",
   },
   {
     id: "2",
@@ -33,13 +38,13 @@ const DATA = [
 
 function listScreen({ navigation }) {
   function renderItem({ item }) {
-    const x = item.imageplace;
     return (
       <View>
         <TouchableOpacity
           style={styles.tourLink}
           onPress={() => {
             navigation.navigate(item.title);
+            console.log(item.imageplace);
           }}
         >
           <View
@@ -59,9 +64,46 @@ function listScreen({ navigation }) {
               borderBottomLeftRadius: 10,
             }}
           >
-            <Text style={{ fontWeight: "bold", color: "black", padding: 10 }}>
-              {item.title}
-            </Text>
+            <View style={{ flexDirection: "row" }}>
+              <Text
+                style={{
+                  width: "70%",
+                  fontWeight: "bold",
+                  color: "black",
+                  padding: 10,
+                }}
+              >
+                {item.title}
+              </Text>
+              <FontAwesome
+                name="star-o"
+                size={24}
+                color="black"
+                style={{
+                  width: "15%",
+                  padding: 10,
+                  marginRight: 0,
+                  right: 0,
+                  position: "absolute",
+                }}
+              />
+            </View>
+            <Text style={{ padding: 10 }}>Description: {item.title}</Text>
+            <TouchableOpacity
+              onPress={() => {
+                Linking.openURL(item.uri).catch((err) => {
+                  console.error("Failed opening page because: ", err);
+                  alert("Failed to open page");
+                });
+              }}
+            >
+              <FontAwesome
+                name="external-link"
+                size={24}
+                color="black"
+                style={{ padding: 10, marginLeft: 5 }}
+              />
+            </TouchableOpacity>
           </View>
         </TouchableOpacity>
       </View>
