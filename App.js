@@ -8,7 +8,7 @@ import dummy from './screens/dummy';
 import HomeScreen from './screens/homeScreen';
 import MapScreen from './screens/mapScreen';
 import ListScreen from './screens/listScreen';
-
+import LoginScreen from './screens/loginScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -46,7 +46,7 @@ export default function App() {
       )}}>
         {(props) => <ListScreen {...props} likes={likes} likeTour={likeTour} />}
       </Tab.Screen>
-      <Tab.Screen name="User" component={dummy} options={{tabBarLabel:'User', tabBarIcon:({color,size}) => (
+      <Tab.Screen name="User" component={LoginScreen} options={{tabBarLabel:'User', tabBarIcon:({color,size}) => (
         <FontAwesome name="user" size={24} color={color} />
       )}} />
     </Tab.Navigator>
