@@ -30,7 +30,7 @@ function ListScreen({ navigation, likes, likeTour }) {
 
   function renderItem({ item }) {
     return (
-        <View style={styles.tourLink}>
+        <View style={styles.tourBox}>
           <Image
             source={item.image}
             style={{
@@ -121,7 +121,7 @@ function ListScreen({ navigation, likes, likeTour }) {
   }
 
   return (
-    <View>
+    <View style={{ alignItems: "center", flex: 1}}>
       <View style={styles.buttons}>
         <PurpleButton title="Tour" onPress={() => {}} />
         <PurpleButton title="Price" onPress={() => {}} />
@@ -131,18 +131,12 @@ function ListScreen({ navigation, likes, likeTour }) {
           setList(newList)
         }} />
       </View>
-      <View
-        style={{
-          alignItems: "center",
-        }}
-      >
-        <FlatList 
-          data={list} 
-          renderItem={renderItem} 
-          keyExtractor={item => item.id}
-          extraData={likes}
-        />
-      </View>
+      <FlatList 
+        data={list} 
+        renderItem={renderItem} 
+        keyExtractor={item => item.id}
+        extraData={likes}
+      />
     </View>
   );
 }
@@ -168,14 +162,12 @@ export default function listStack(props) {
 }
 
 const styles = StyleSheet.create({
-  tourLink: {
+  tourBox: {
     margin: 10,
     width: 350,
     height: 250,
-    backgroundColor: "#7556A9",
+    backgroundColor: "white",
     borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "center",
   },
   buttons: {
     flexDirection: 'row',
