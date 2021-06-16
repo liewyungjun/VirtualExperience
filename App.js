@@ -9,21 +9,45 @@ import HomeScreen from './screens/homeScreen';
 import MapScreen from './screens/mapScreen';
 import ListScreen from './screens/listScreen';
 import LoginScreen from './screens/loginScreen';
+import firebase from './database/firebase'
 
 const Tab = createBottomTabNavigator();
 
+const db = firebase.firestore().collection("users")
+const user = firebase.auth().user?.uid
+
 export default function App() {
   const [loading, setLoading] = useState(true)
-  const [likes, setLikes] = useState(["1"])
+  const [likes, setLikes] = useState([])
+  const [user, setUser] = useState(user)
 
   function likeTour(id) {
     const newArray = likes.includes(id) ? likes.filter(tour => tour !== id) : [...likes, id]
-    setLikes(newArray)
+    if (user) {
+      db.doc(user).update({ likes: newArray })
+        .catch(error => console.log(error))
+    } else {
+      setLikes(newArray)
+    }
   }
 
   useEffect(() => {
     setTimeout(() => setLoading(false), 3000)
   }, [])
+
+  useEffect(() => {
+    if (user) {
+      db.doc(user).onSnapshot(doc => {
+        if (doc.exists) {
+          setLikes(doc.data().likes)
+        } else {
+          db.doc(user).set({
+            likes: []
+          })
+        }
+      })
+    }
+  }, [user])
 
   return (
     <>
@@ -46,9 +70,11 @@ export default function App() {
       )}}>
         {(props) => <ListScreen {...props} likes={likes} likeTour={likeTour} />}
       </Tab.Screen>
-      <Tab.Screen name="User" component={LoginScreen} options={{tabBarLabel:'User', tabBarIcon:({color,size}) => (
+      <Tab.Screen name="User" options={{tabBarLabel:'User', tabBarIcon:({color,size}) => (
         <FontAwesome name="user" size={24} color={color} />
-      )}} />
+      )}}>
+        {(props) => <LoginScreen {...props} user={user} setUser={setUser} />}
+      </Tab.Screen>
     </Tab.Navigator>
     </NavigationContainer>
       ) : (

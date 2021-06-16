@@ -9,7 +9,7 @@ import ProfileScreen from "./dummy"
 
 const auth = firebase.auth();
 
-function Login({navigation, setIsSignedIn}) {
+function Login({navigation, setUser}) {
   const [username,setUsername] = useState("");
   const [password,setPassword] = useState("");
   const [errorMessage,setErrorMessage] = useState("");
@@ -17,11 +17,11 @@ function Login({navigation, setIsSignedIn}) {
   function login() {
   	if (username.trim() !== "" && password.trim() !== "") {
       auth.signInWithEmailAndPassword(username, password)
-        .then(() => setIsSignedIn(true))
+        .then(userCredential => setUser(userCredential.user.uid))
         .catch(error => {
       	  if (error.code === "auth/user-not-found") {
             auth.createUserWithEmailAndPassword(username, password)
-              .then(() => navigation.navigate("Profile"))
+              .then(userCredential => setUser(userCredential.user.uid))
               .catch(error => setErrorMessage(error.message))
       	  } else {
       	    setErrorMessage(error.message)
@@ -48,7 +48,7 @@ function Login({navigation, setIsSignedIn}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'left',
+    alignItems: 'flex-start',
     justifyContent:'center',
   },
   textStyle: {
@@ -75,14 +75,14 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   headerTitleStyle:{
-    alignItem:'left',
+    alignItems:'flex-start',
     fontSize: 30,
-    fontWeight:"Bold",
+    fontWeight:"bold",
   },
   headerStyle:{
-    alignItem:'left',
+    alignItems:'flex-start',
     fontSize: 100,
-    fontWeight:"Bold",
+    fontWeight:"bold",
   },
   buttonStyle:{
      marginTop:20,
@@ -96,10 +96,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function EventsStack() {
-  const [isSignedIn, setIsSignedIn] = useState(auth.user)
-
+export default function EventsStack({ user, setUser }) {
   return (<>
-  	{isSignedIn ? <ProfileScreen /> : <Login setIsSignedIn={setIsSignedIn} />}
+  	{user ? <ProfileScreen /> : <Login setUser={setUser} />}
   </>);
 }
