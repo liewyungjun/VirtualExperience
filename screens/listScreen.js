@@ -10,46 +10,40 @@ import {
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import philatelicinfo from "./infopages/philatelicMuseum";
-import planetInfo from "./infopages/planet";
+import InfoScreen from "./infoScreen"
+import data from '../data.js'
 
-const DATA = [
-  {
-    id: "0",
-    title: "Singapore Philatelic Museum",
-    imageplace: "../assets/philatelicmuseum.jpg",
-  },
-  {
-    id: "1",
-    title: "Planet or Plastic?",
-    imageplace: "../assets/planetpic.webp",
-  },
-  {
-    id: "2",
-    title: "Third Item",
-    imageplace: "../assets/planetpic.webp",
-  },
-];
+function PurpleButton(props) {
+  return (
+    <TouchableOpacity style={styles.button} onPress={props.onPress}>
+      <Text style={styles.buttonText}>{props.title}</Text>
+    </TouchableOpacity>
+  );
+}
 
 function listScreen({ navigation }) {
+  const [list, setList] = React.useState(data);
+
   function renderItem({ item }) {
-    const x = item.imageplace;
     return (
       <View>
         <TouchableOpacity
           style={styles.tourLink}
           onPress={() => {
-            navigation.navigate(item.title);
+            navigation.navigate('Info', {
+              id: item.id,
+              title: item.title,
+            });
           }}
         >
-          <View
+          <Image
+            source={item.image}
             style={{
               width: "100%",
               height: "50%",
               borderTopRightRadius: 10,
               borderTopLeftRadius: 10,
-            }}
-          ></View>
+            }} />
           <View
             style={{
               backgroundColor: "white",
@@ -67,19 +61,24 @@ function listScreen({ navigation }) {
       </View>
     );
   }
+
   return (
-    <View>
-      <View
-        style={{ height: 50, width: "100%", backgroundColor: "black" }}
-      ></View>
+    <View style={{flex: 1}}>
+      <View style={styles.buttons}>
+        <PurpleButton title="Tour" onPress={() => {}} />
+        <PurpleButton title="Price" onPress={() => {}} />
+        <PurpleButton title="Favourite" onPress={() => {}} />
+      </View>
       <View
         style={{
-          justifyContent: "center",
           alignItems: "center",
-          backgroundColor: "#E5E5E5",
         }}
       >
-        <FlatList data={DATA} renderItem={renderItem} />
+        <FlatList 
+          data={list} 
+          renderItem={renderItem} 
+          keyExtractor={item => item.id}
+        />
       </View>
     </View>
   );
@@ -87,15 +86,17 @@ function listScreen({ navigation }) {
 
 const Stack = createStackNavigator();
 
-export default function dummyStack() {
+export default function listStack(props) {
+  const { likes, likeTour } = props
   return (
     <Stack.Navigator>
       <Stack.Screen name="Tour List" component={listScreen} />
-      <Stack.Screen
-        name="Singapore Philatelic Museum"
-        component={philatelicinfo}
-      />
-      <Stack.Screen name="Planet or Plastic?" component={planetInfo} />
+      <Stack.Screen 
+          name='Info' 
+          options={({ route }) => ({ title: route.params.title })}
+      >
+        {(props) => <InfoScreen {...props} likes={likes} likeTour={likeTour} />}
+      </Stack.Screen>
     </Stack.Navigator>
   );
 }
@@ -110,4 +111,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  buttons: {
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'center',
+    marginTop: 10,
+  },
+  button: {
+    backgroundColor: "#7556A9",
+    padding: 10,
+    borderRadius: 10,
+    margin: 5,
+  },
+  buttonText: {
+    color: 'white'
+  }
 });

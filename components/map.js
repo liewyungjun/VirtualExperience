@@ -2,22 +2,9 @@ import * as React from 'react';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import philatelicinfo from '../screens/infopages/philatelicMuseum';
-import planetInfo from '../screens/infopages/planet';
+import InfoScreen from '../screens/infoScreen'
+import locations from '../data.js'
 
-const locations = [{
-	coordinate: {
-		latitude: 1.2936221316260519,
-		longitude: 103.84879194602308,
-	},
-	title: 'Orange Room Tour',
-}, {
-	coordinate: {
-		latitude: 1.2855560432517972,
-		longitude: 103.86096858465896,
-	},
-	title: 'Planet or Plastic?',
-}]
 
 function MapBox({navigation}) {
   return (
@@ -31,13 +18,16 @@ function MapBox({navigation}) {
       }}
       rotateEnabled={false}
     >
-      {locations.map((tour, index) => (
+      {locations.map((tour) => (
         <Marker
-          key={index}
+          key={tour.id}
           coordinate={tour.coordinate}
           title={tour.title}
         >
-          <Callout onPress={() => navigation.navigate(tour.title)} />
+          <Callout onPress={() => navigation.navigate('Info', {
+            id: tour.id,
+            title: tour.title,
+          })} />
         </Marker>
       ))}
     </MapView>
@@ -46,12 +36,17 @@ function MapBox({navigation}) {
 
 const Stack = createStackNavigator();
 
-export default function mapStack(){
+export default function mapStack(props){
+  const { likes, likeTour } = props
   return(
       <Stack.Navigator initialRouteName='Map'>
         <Stack.Screen name='Map' component={MapBox}/>
-        <Stack.Screen name='Orange Room Tour' component={philatelicinfo}/>
-        <Stack.Screen name='Planet or Plastic?' component={planetInfo}/>
+        <Stack.Screen 
+          name='Info' 
+          options={({ route }) => ({ title: route.params.title })}
+        >
+          {(props) => <InfoScreen {...props} likes={likes} likeTour={likeTour} />}
+        </Stack.Screen>
       </Stack.Navigator>
   )
 }

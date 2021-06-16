@@ -1,19 +1,25 @@
 import * as React from 'react';
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import { Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { FontAwesome } from '@expo/vector-icons';
 import dummy from './screens/dummy';
 import HomeScreen from './screens/homeScreen';
 import MapScreen from './screens/mapScreen';
-import { FontAwesome } from '@expo/vector-icons';
-import listScreen from './screens/listScreen'
+import ListScreen from './screens/listScreen';
+
 
 const Tab = createBottomTabNavigator();
 
-
 export default function App() {
   const [loading, setLoading] = useState(true)
+  const [likes, setLikes] = useState([1])
+
+  function likeTour(id) {
+    const newArray = likes.includes(id) ? likes.filter(tour => tour !== id) : [...likes, id]
+    setLikes(newArray)
+  }
 
   useEffect(() => {
     setTimeout(() => setLoading(false), 3000)
@@ -28,14 +34,19 @@ export default function App() {
         activeTintColor: '#7724b7',
         inactiveTintColor: 'gray',
       }}
+      initialRouteName="List"
     >
-      <Tab.Screen name="Map" component={MapScreen} options={{tabBarLabel:'Map', tabBarIcon:({color,size}) =>(
+      <Tab.Screen name="Map" options={{tabBarLabel:'Map', tabBarIcon:({color,size}) => (
         <FontAwesome name="map" size={24} color={color} />
-      )}} />
-      <Tab.Screen name="List" component={listScreen} options={{tabBarLabel:'List', tabBarIcon:({color,size}) =>(
-        <FontAwesome name="list-ul" size={24} color="black" />
-      )}} />
-      <Tab.Screen name="User" component={dummy} options={{tabBarLabel:'User', tabBarIcon:({color,size}) =>(
+      )}}>
+        {(props) => <MapScreen {...props} likes={likes} likeTour={likeTour} />}
+      </Tab.Screen>
+      <Tab.Screen name="List" options={{tabBarLabel:'List', tabBarIcon:({color,size}) => (
+        <FontAwesome name="list-ul" size={24} color={color} />
+      )}}>
+        {(props) => <ListScreen {...props} likes={likes} likeTour={likeTour} />}
+      </Tab.Screen>
+      <Tab.Screen name="User" component={dummy} options={{tabBarLabel:'User', tabBarIcon:({color,size}) => (
         <FontAwesome name="user" size={24} color={color} />
       )}} />
     </Tab.Navigator>
@@ -46,21 +57,3 @@ export default function App() {
       </>
   );
 }
- /* return (
-    <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Map" component={HomeScreen} options={{tabBarLabel:'Map', tabBarIcon:({color,size}) =>(
-          <FontAwesome name="map" size={24} color="black" />
-        )}} />
-        <Tab.Screen name="List" component={HomeScreen} options={{tabBarLabel:'List', tabBarIcon:({color,size}) =>(
-          <FontAwesome name="list-ul" size={24} color="black" />
-        )}} />
-        <Tab.Screen name="User" component={HomeScreen} options={{tabBarLabel:'User', tabBarIcon:({color,size}) =>(
-          <FontAwesome name="user" size={24} color="black" />
-        )}} />
-      </Tab.Navigator>
-    </NavigationContainer>
-  );
-}
-*/

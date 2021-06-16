@@ -15,8 +15,9 @@ if (Platform.OS === 'web') {
   MapView = require('../components/map').default
 }
 
-export default function MapScreen() {
-  return <MapView />
+export default function MapScreen(props) {
+  const { likes, likeTour } = props
+  return <MapView likes={likes} likeTour={likeTour}/>
 }
 
 
