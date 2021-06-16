@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   TouchableOpacity,
@@ -25,8 +25,15 @@ function PurpleButton(props) {
 }
 
 function ListScreen({ navigation, likes, likeTour }) {
-  const [list, setList] = React.useState(data);
-  const [favorite, setFavorite] = React.useState(false);
+  const [list, setList] = useState(data);
+  const [favorite, setFavorite] = useState(false);
+  const [price, setPrice] = useState(false);
+
+  useEffect(() => {
+    const priceFilter = price ? data.filter(item => item.price === 0) : data
+    const favFilter = favorite ? priceFilter.filter(item => likes.includes(item.id)) : priceFilter
+    setList(favFilter)
+  }, [price, favorite])
 
   function renderItem({ item }) {
     return (
@@ -121,15 +128,10 @@ function ListScreen({ navigation, likes, likeTour }) {
   }
 
   return (
-    <View style={{ alignItems: "center", flex: 1}}>
+    <View style={{ alignItems: "center", flex: 1 }}>
       <View style={styles.buttons}>
-        <PurpleButton title="Tour" onPress={() => {}} />
-        <PurpleButton title="Price" onPress={() => {}} />
-        <PurpleButton title={favorite ? "Show: Favorites" : "Show: All"} onPress={() => {
-          setFavorite(!favorite)
-          const newList = favorite ? data : list.filter(item => likes.includes(item.id))
-          setList(newList)
-        }} />
+        <PurpleButton title={price ? "Price: Free" : "Price: All"} onPress={() => setPrice(!price)} />
+        <PurpleButton title={favorite ? "Status: Favorites" : "Status: All"} onPress={() => setFavorite(!favorite)} />
       </View>
       <FlatList 
         data={list} 
@@ -147,13 +149,12 @@ export default function listStack(props) {
   const { likes, likeTour } = props
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Tour List"
-      >
+      <Stack.Screen name="Tour List">
         {(props) => <ListScreen {...props} likes={likes} likeTour={likeTour} />}
       </Stack.Screen>
       <Stack.Screen 
-          name='Info' 
-          options={({ route }) => ({ title: route.params.title })}
+        name='Info' 
+        options={({ route }) => ({ title: route.params.title })}
       >
         {(props) => <InfoScreen {...props} likes={likes} likeTour={likeTour} />}
       </Stack.Screen>
@@ -163,7 +164,9 @@ export default function listStack(props) {
 
 const styles = StyleSheet.create({
   tourBox: {
-    margin: 10,
+    marginBottom: 20,
+    marginLeft: 10,
+    marginRight: 10,
     width: 350,
     height: 250,
     backgroundColor: "white",

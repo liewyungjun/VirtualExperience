@@ -4,6 +4,7 @@ const Data = [
     "title": "Singapore Philatelic Museum",
     "description": "Singapore Philatelic Museum is the custodian and curator of Singapore's treasure of philatelic materials. The museum collections range from stamps and archival philatelic material of Singapore from the 1830s to present day, and stamps from member countries of the Universal Postal Union.",
     "image": require("./assets/philatelicmuseum.jpg"),
+    "price": 0,
     "link": "https://www.nhb.gov.sg/spm/who-we-are/resources/virtual-tours",
     "coordinate": {
 	  	"latitude": 1.2936221316260519,
@@ -15,6 +16,7 @@ const Data = [
     "title": "Planet or Plastic?",
     "description": "Want to learn more about the global plastic pollution crisis and its impact on our environment? Join our Museum Ambassador, Diona, on a virtual tour through our new Planet or Plastic? exhibition. Look at how some of these impactful photographs and infographics will leave you feeling informed about this generation defining issue and ready to make the choice on what to prioritise - planet or plastic?",
     "image": require("./assets/planetpic.webp"),
+    "price": 0,
     "link": "https://www.marinabaysands.com/museum/events/virtual-tour-planet-or-plastic.html",
     "coordinate": {
 		  "latitude": 1.2855560432517972,
@@ -26,6 +28,7 @@ const Data = [
     "title": "Third Item",
     "description": "description",
     "image": require("./assets/planetpic.webp"),
+    "price": 5,
     "link": "https://www.marinabaysands.com/museum/events/virtual-tour-planet-or-plastic.html",
     "coordinate": {
 		  "latitude": 1.3855560432517972,
