@@ -8,7 +8,7 @@ import planetInfo from './infopages/planet';
 function dummy({navigation}) {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Dummy Screen!</Text>
+      <Text>The List goes Here!</Text>
       <TouchableOpacity style={styles.tourLink} onPress={()=>navigation.navigate('Singapore Philatelic Museum')}>
           <Text style={{fontWeight:'bold', color:'white',}}>Singapore Philatelic Museum</Text>
       </TouchableOpacity>
@@ -24,7 +24,7 @@ const Stack = createStackNavigator();
 export default function dummyStack(){
   return(
       <Stack.Navigator>
-        <Stack.Screen name='Dummy' component={dummy}/>
+        <Stack.Screen name='List' component={dummy}/>
         <Stack.Screen name='Singapore Philatelic Museum' component={philatelicinfo}/>
         <Stack.Screen name='Planet or Plastic?' component={planetInfo}/>
       </Stack.Navigator>
