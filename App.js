@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import dummy from './screens/dummy';
 import HomeScreen from './screens/homeScreen';
 import { FontAwesome } from '@expo/vector-icons';
+import listScreen from './screens/listScreen'
 
 const Tab = createBottomTabNavigator();
 
@@ -25,7 +26,7 @@ export default function App() {
       <Tab.Screen name="Map" component={dummy} options={{tabBarLabel:'Map', tabBarIcon:({color,size}) =>(
         <FontAwesome name="map-o" size={24} color="black" />
       )}} />
-      <Tab.Screen name="List" component={dummy} options={{tabBarLabel:'List', tabBarIcon:({color,size}) =>(
+      <Tab.Screen name="List" component={listScreen} options={{tabBarLabel:'List', tabBarIcon:({color,size}) =>(
         <FontAwesome name="list-ul" size={24} color="black" />
       )}} />
       <Tab.Screen name="User" component={dummy} options={{tabBarLabel:'User', tabBarIcon:({color,size}) =>(
